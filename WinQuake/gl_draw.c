@@ -8,7 +8,7 @@ of the License, or (at your option) any later version.
 
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 See the GNU General Public License for more details.
 
@@ -77,11 +77,7 @@ void GL_Bind (int texnum)
 	if (currenttexture == texnum)
 		return;
 	currenttexture = texnum;
-#ifdef _WIN32
-	bindTexFunc (GL_TEXTURE_2D, texnum);
-#else
 	glBindTexture(GL_TEXTURE_2D, texnum);
-#endif
 }
 
 
@@ -248,7 +244,7 @@ qpic_t	*Draw_CachePic (char *path)
 //
 // load the pic from disk
 //
-	dat = (qpic_t *)COM_LoadTempFile (path);	
+	dat = (qpic_t *)COM_LoadTempFile (path);
 	if (!dat)
 		Sys_Error ("Draw_CachePic: failed to load %s", path);
 	SwapPic (dat);
@@ -403,7 +399,7 @@ void Draw_Init (void)
 
 	start = Hunk_LowMark();
 
-	cb = (qpic_t *)COM_LoadTempFile ("gfx/conback.lmp");	
+	cb = (qpic_t *)COM_LoadTempFile ("gfx/conback.lmp");
 	if (!cb)
 		Sys_Error ("Couldn't load gfx/conback.lmp");
 	SwapPic (cb);
@@ -425,7 +421,7 @@ void Draw_Init (void)
 
  	// scale console to vid size
  	dest = ncdata = Hunk_AllocName(vid.conwidth * vid.conheight, "conback");
- 
+
  	for (y=0 ; y<vid.conheight ; y++, dest += vid.conwidth)
  	{
  		src = cb->data + cb->width * (y*cb->height/vid.conheight);
@@ -499,7 +495,7 @@ void Draw_Character (int x, int y, int num)
 	byte			*dest;
 	byte			*source;
 	unsigned short	*pusdest;
-	int				drawline;	
+	int				drawline;
 	int				row, col;
 	float			frow, fcol, size;
 
@@ -507,7 +503,7 @@ void Draw_Character (int x, int y, int num)
 		return;		// space
 
 	num &= 255;
-	
+
 	if (y <= -8)
 		return;			// totally off screen
 
@@ -643,7 +639,7 @@ void Draw_TransPic (int x, int y, qpic_t *pic)
 	{
 		Sys_Error ("Draw_TransPic: bad coordinates");
 	}
-		
+
 	Draw_Pic (x, y, pic);
 }
 
@@ -1086,7 +1082,7 @@ done: ;
 	}
 }
 
-void GL_Upload8_EXT (byte *data, int width, int height,  qboolean mipmap, qboolean alpha) 
+void GL_Upload8_EXT (byte *data, int width, int height,  qboolean mipmap, qboolean alpha)
 {
 	int			i, s;
 	qboolean	noalpha;
@@ -1284,12 +1280,12 @@ int GL_LoadPicTexture (qpic_t *pic)
 
 static GLenum oldtarget = TEXTURE0_SGIS;
 
-void GL_SelectTexture (GLenum target) 
+void GL_SelectTexture (GLenum target)
 {
 	if (!gl_mtexable)
 		return;
 	qglSelectTextureSGIS(target);
-	if (target == oldtarget) 
+	if (target == oldtarget)
 		return;
 	cnttextures[oldtarget-TEXTURE0_SGIS] = currenttexture;
 	currenttexture = cnttextures[target-TEXTURE0_SGIS];

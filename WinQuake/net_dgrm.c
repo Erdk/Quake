@@ -8,7 +8,7 @@ of the License, or (at your option) any later version.
 
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 See the GNU General Public License for more details.
 
@@ -23,12 +23,6 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 #define BAN_TEST
 
 #ifdef BAN_TEST
-#if defined(_WIN32)
-#include <windows.h>
-#elif defined (NeXT)
-#include <sys/socket.h>
-#include <arpa/inet.h>
-#else
 #define AF_INET 		2	/* internet */
 struct in_addr
 {
@@ -42,14 +36,13 @@ struct in_addr
 #define	s_addr	S_un.S_addr	/* can be used for most tcp & ip code */
 struct sockaddr_in
 {
-    short			sin_family;
-    unsigned short	sin_port;
+  short			sin_family;
+  unsigned short	sin_port;
 	struct in_addr	sin_addr;
-    char			sin_zero[8];
+  char			sin_zero[8];
 };
 char *inet_ntoa(struct in_addr in);
 unsigned long inet_addr(const char *cp);
-#endif
 #endif	// BAN_TEST
 
 #include "quakedef.h"
@@ -326,7 +319,7 @@ int	Datagram_GetMessage (qsocket_t *sock)
 			ReSendMessage (sock);
 
 	while(1)
-	{	
+	{
 		length = sfunc.Read (sock->socket, (byte *)&packetBuffer, NET_DATAGRAMSIZE, &readaddr);
 
 //	if ((rand() & 255) > 220)
@@ -890,7 +883,7 @@ static qsocket_t *_Datagram_CheckNewConnections (void)
 		int			activeNumber;
 		int			clientNumber;
 		client_t	*client;
-		
+
 		playerNumber = MSG_ReadByte();
 		activeNumber = -1;
 		for (clientNumber = 0, client = svs.clients; clientNumber < svs.maxclients; clientNumber++, client++)
@@ -1067,7 +1060,7 @@ static qsocket_t *_Datagram_CheckNewConnections (void)
 		return NULL;
 	}
 
-	// everything is allocated, just fill in the details	
+	// everything is allocated, just fill in the details
 	sock->socket = newsock;
 	sock->landriver = net_landriverlevel;
 	sock->addr = clientaddr;

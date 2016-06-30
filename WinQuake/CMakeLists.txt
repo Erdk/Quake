@@ -65,7 +65,6 @@ set(SOURCE_FILES
     menu.c
     menu.h
     modelgen.h
-    mpdosock.h
     net.h
     net_bsd.c
     net_dgrm.c
