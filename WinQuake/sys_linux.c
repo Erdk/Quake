@@ -36,14 +36,16 @@ void Sys_DebugNumber(int y, int val)
 {
 }
 
+const int TEXT_BUF_SIZE = 1024;
+
 void Sys_Printf (char *fmt, ...)
 {
   va_list		argptr;
-  char		text[1024];
+  char		text[TEXT_BUF_SIZE];
   unsigned char		*p;
 
-  va_start (argptr,fmt);
-  vsprintf (text,fmt,argptr);
+  va_start (argptr, fmt);
+  vsnprintf (text, TEXT_BUF_SIZE - 1, fmt, argptr);
   va_end (argptr);
 
   if (strlen(text) > sizeof(text))
@@ -78,9 +80,6 @@ void Sys_Quit (void)
 
 void Sys_Init(void)
 {
-#if id386
-  Sys_SetFPCW();
-#endif
 }
 
 void Sys_Error (char *error, ...)
@@ -189,7 +188,7 @@ int Sys_FileRead (int handle, void *dest, int count)
 
 void Sys_DebugLog(char *file, char *fmt, ...)
 {
-  va_list argptr; 
+  va_list argptr;
   static char data[1024];
   int fd;
 
@@ -228,10 +227,10 @@ void Sys_EditFile(char *filename)
 double Sys_FloatTime (void)
 {
   struct timeval tp;
-  struct timezone tzp; 
-  static int      secbase; 
+  struct timezone tzp;
+  static int      secbase;
 
-  gettimeofday(&tp, &tzp);  
+  gettimeofday(&tp, &tzp);
 
   if (!secbase)
   {
@@ -255,12 +254,6 @@ void alarm_handler(int x)
 
 void Sys_LineRefresh(void)
 {
-}
-
-void floating_point_exception_handler(int whatever)
-{
-  //	Sys_Warn("floating point exception\n");
-  signal(SIGFPE, floating_point_exception_handler);
 }
 
 char *Sys_ConsoleInput(void)
@@ -288,16 +281,6 @@ char *Sys_ConsoleInput(void)
   return NULL;
 }
 
-#if !id386
-void Sys_HighFPPrecision (void)
-{
-}
-
-void Sys_LowFPPrecision (void)
-{
-}
-#endif
-
 int main (int c, char **v)
 {
 
@@ -307,22 +290,13 @@ int main (int c, char **v)
   extern int recording;
   int j;
 
-  //	static char cwd[1024];
-
-  //	signal(SIGFPE, floating_point_exception_handler);
-  signal(SIGFPE, SIG_IGN);
-
   memset(&parms, 0, sizeof(parms));
 
   COM_InitArgv(c, v);
   parms.argc = com_argc;
   parms.argv = com_argv;
 
-#ifdef GLQUAKE
-  parms.memsize = 16*1024*1024;
-#else
-  parms.memsize = 8*1024*1024;
-#endif
+  parms.memsize = 64*1024*1024;
 
   j = COM_CheckParm("-mem");
   if (j)
@@ -401,4 +375,3 @@ void Sys_MakeCodeWriteable (unsigned long startaddr, unsigned long length)
     Sys_Error("Protection change failed\n");
 
 }
-

@@ -1,10 +1,15 @@
 cmake_minimum_required(VERSION 3.3.2)
-project(GLQuake C)
+project(GLQuake)
+
+enable_language(C ASM)
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DGLQUAKE")
-
 set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -Wall -g3 -ggdb")
 set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -Wall -march=native")
+
+set(CMAKE_ASM_FLAGS         "${CMAKE_ASM_FLAGS} -DGLQUAKE -x assembler-with-cpp")
+set(CMAKE_ASM_FLAGS_DEBUG   "${CMAKE_ASM_FLAGS_DEBUG} -Wall -g3 -ggdb -DGLQUAKE -x assembler-with-cpp")
+set(CMAKE_ASM_FLAGS_RELEASE "${CMAKE_ASM_FLAGS_RELEASE} -DGLQUAKE -x assembler-with-cpp")
 
 set(SOURCE_FILES
     adivtab.h
@@ -93,7 +98,6 @@ set(SOURCE_FILES
     snd_linux.c
     snd_mem.c
     snd_mix.c
-    snd_mixa.s
     sound.h
     spritegn.h
     sv_main.c
@@ -101,7 +105,6 @@ set(SOURCE_FILES
     sv_phys.c
     sv_user.c
     sys.h
-    sys_dosa.s
     sys_linux.c
     vgamodes.h
     vid.h
@@ -111,7 +114,6 @@ set(SOURCE_FILES
     wad.h
     world.c
     world.h
-    worlda.s
     zone.c
     zone.h)
 

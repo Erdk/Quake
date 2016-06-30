@@ -8,7 +8,7 @@ of the License, or (at your option) any later version.
 
 This program is distributed in the hope that it will be useful,
 but WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  
+MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.
 
 See the GNU General Public License for more details.
 
@@ -359,7 +359,7 @@ void Con_Printf(char *fmt, ...) {
   static qboolean inupdate;
 
   va_start (argptr, fmt);
-  vsprintf(msg, fmt, argptr);
+  vsnprintf(msg, MAXPRINTMSG, fmt, argptr);
   va_end (argptr);
 
 // also echo to debugging console
@@ -452,7 +452,7 @@ The input line scrolls horizontally if typing goes beyond the right edge
 ================
 */
 void Con_DrawInput(void) {
-  int y;
+  //int y;
   int i;
   char *text;
 
@@ -473,7 +473,7 @@ void Con_DrawInput(void) {
     text += 1 + key_linepos - con_linewidth;
 
 // draw it
-  y = con_vislines - 16;
+  //y = con_vislines - 16;
 
   for (i = 0; i < con_linewidth; i++)
     Draw_Character((i + 1) << 3, con_vislines - 16, text[i]);
@@ -613,4 +613,3 @@ void Con_NotifyBox(char *text) {
   key_dest = key_game;
   realtime = 0;                                // put the cursor back to invisible
 }
-
