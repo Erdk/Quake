@@ -19,6 +19,8 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 */
 // vid.h -- video driver defs
 
+#include <GLFW/glfw3.h>
+
 #define VID_CBITS	6
 #define VID_GRADES	(1 << VID_CBITS)
 
@@ -49,6 +51,7 @@ typedef struct
 	unsigned		conheight;
 	int				maxwarpwidth;
 	int				maxwarpheight;
+	GLFWwindow		*window;
 	pixel_t			*direct;		// direct drawing to framebuffer, if not
 									//  NULL
 } viddef_t;

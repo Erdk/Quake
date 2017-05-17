@@ -1,6 +1,8 @@
 cmake_minimum_required(VERSION 3.3.2)
 project(GLQuake)
 
+find_package(glfw3 REQUIRED)
+
 enable_language(C ASM)
 
 set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DGLQUAKE")
@@ -117,4 +119,4 @@ set(SOURCE_FILES
     src/zone.h)
 
 add_executable(GLQuake ${SOURCE_FILES})
-target_link_libraries(GLQuake -lGL -lX11 -lXext -ldl -lXxf86dga -lXxf86vm -lm)
+target_link_libraries(GLQuake glfw -lm -ldl -lGL)

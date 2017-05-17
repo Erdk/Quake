@@ -1,0 +1,48 @@
+{
+    // See https://go.microsoft.com/fwlink/?LinkId=733558
+    // for the documentation about the tasks.json format
+    "version": "0.1.0",
+    "isShellCommand": true,
+    "showOutput": "never",
+    "problemMatcher": {
+        "owner": "cpp",
+        "fileLocation": ["absolute"],
+        "pattern": {
+            "regexp": "^(.*):(\\d+):(\\d+):\\s+(warning|error|fatal error):\\s+(.*)$",
+            "file": 1,
+            "line": 2,
+            "column": 3,
+            "severity": 4,
+            "message": 5
+        }
+    },
+    "tasks": [
+        {
+            "taskName": "Build",
+            "command": "make",
+            "options": {
+                "cwd": "${workspaceRoot}/build"
+            },
+            "isBuildCommand": true,
+            "suppressTaskName": true
+        },
+        {
+            "taskName": "Clean",
+            "command": "make",
+            "options": {
+                "cwd": "${workspaceRoot}/build"
+            },
+            "args": ["clean"],
+            "suppressTaskName": true
+        },
+        {
+            "taskName": "CMake",
+            "command": "cmake",
+            "args": [".."],
+            "options": {
+                "cwd": "${workspaceRoot}/build"
+            },
+            "suppressTaskName": true
+        }
+    ]
+}

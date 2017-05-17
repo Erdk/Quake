@@ -281,7 +281,7 @@ char *Sys_ConsoleInput(void)
   return NULL;
 }
 
-int main (int c, char **v)
+int main (int c, char *v[])
 {
 
   double		time, oldtime, newtime;
@@ -321,7 +321,7 @@ int main (int c, char **v)
   }
 
   oldtime = Sys_FloatTime () - 0.1;
-  while (1)
+  while (!glfwWindowShouldClose(vid.window))
   {
     // find time spent rendering last frame
     newtime = Sys_FloatTime ();
@@ -343,7 +343,6 @@ int main (int c, char **v)
       oldtime += time;
 
     Host_Frame (time);
-
     // graphic debugging aids
     if (sys_linerefresh.value)
       Sys_LineRefresh ();
