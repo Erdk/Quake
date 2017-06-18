@@ -29,8 +29,9 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 #include "quakedef.h"
 
-#include <GL/glx.h>
+//#include <GL/glx.h>
 
+#include <X11/Xlib.h>
 #include <X11/keysym.h>
 #include <X11/cursorfont.h>
 
@@ -674,6 +675,7 @@ static void Check_Gamma (unsigned char *pal)
 void VID_Init(unsigned char *palette)
 {
 	int i;
+  /*
 	int attrib[] = {
 		GLX_RGBA,
 		GLX_RED_SIZE, 1,
@@ -683,6 +685,7 @@ void VID_Init(unsigned char *palette)
 		GLX_DEPTH_SIZE, 1,
 		None
 	};
+  */
 	char	gldir[MAX_OSPATH];
 	int width = 640, height = 480;
 	//XSetWindowAttributes attr;
@@ -862,6 +865,8 @@ void VID_Init(unsigned char *palette)
 		glfwTerminate();
 		Sys_Quit();
 	}
+
+  glfwMakeContextCurrent(vid.window);
 
 	GL_Init();
 

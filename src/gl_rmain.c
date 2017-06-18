@@ -290,7 +290,7 @@ void GL_DrawAliasFrame (aliashdr_t *paliashdr, int posenum)
 {
 //	float	s, t;
 	float 	l;
-	int		/*i, j; */
+	/*int		i, j; */
 	//int		index;
 	trivertx_t	/**v,*/ *verts;
 	//int		list;

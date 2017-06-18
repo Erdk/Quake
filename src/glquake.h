@@ -18,14 +18,14 @@ Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 
 */
 
-#include <GL/gl.h>
-#include <GL/glu.h>
+#include <GLFW/glfw3.h>
+//#include <GL/glu.h>
 
 void GL_BeginRendering (int *x, int *y, int *width, int *height);
 void GL_EndRendering (void);
 
 extern	int texture_extension_number;
-extern	int		texture_mode;
+extern	int	texture_mode;
 
 extern	float	gldepthmin, gldepthmax;
 
@@ -68,15 +68,15 @@ texture_t *R_TextureAnimation (texture_t *base);
 typedef struct surfcache_s
 {
 	struct surfcache_s	*next;
-	struct surfcache_s 	**owner;		// NULL is an empty chunk of memory
-	int					lightadj[MAXLIGHTMAPS]; // checked for strobe flush
-	int					dlight;
-	int					size;		// including header
-	unsigned			width;
-	unsigned			height;		// DEBUG only needed for debug
-	float				mipscale;
-	struct texture_s	*texture;	// checked for animating textures
-	byte				data[4];	// width*height elements
+	struct surfcache_s	**owner;		            // NULL is an empty chunk of memory
+	int					        lightadj[MAXLIGHTMAPS]; // checked for strobe flush
+	int					        dlight;
+	int					        size;		                // including header
+	unsigned            width;
+	unsigned            height;		              // DEBUG only needed for debug
+	float               mipscale;
+	struct texture_s    *texture;	              // checked for animating textures
+	byte                data[4];	              // width*height elements
 } surfcache_t;
 
 
