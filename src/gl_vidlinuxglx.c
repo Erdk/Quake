@@ -246,6 +246,59 @@ static int XLateKey(XKeyEvent *ev)
 	return key;
 }
 
+static int KeyGLFWToQuake(int glfwKey)
+{
+	switch(glfwKey)
+	{
+		case GLFW_KEY_PAGE_UP:       return K_PGUP;
+		case GLFW_KEY_PAGE_DOWN:     return K_PGDN;
+		case GLFW_KEY_HOME:	         return K_HOME;
+		case GLFW_KEY_END:	         return K_END;
+		case GLFW_KEY_LEFT:	         return K_LEFTARROW;
+		case GLFW_KEY_RIGHT:	       return K_RIGHTARROW;
+		case GLFW_KEY_DOWN:	         return K_DOWNARROW;
+		case GLFW_KEY_UP:		         return K_UPARROW;
+		case GLFW_KEY_ESCAPE:        return K_ESCAPE;
+		case GLFW_KEY_KP_ENTER:
+		case GLFW_KEY_ENTER:         return K_ENTER;
+		case GLFW_KEY_TAB:		       return K_TAB;
+		case GLFW_KEY_F1:		 	       return K_F1;
+		case GLFW_KEY_F2:		         return K_F2;
+		case GLFW_KEY_F3:		         return K_F3;
+		case GLFW_KEY_F4:		         return K_F4;
+		case GLFW_KEY_F5:		         return K_F5;
+		case GLFW_KEY_F6:		         return K_F6;
+		case GLFW_KEY_F7:		         return K_F7;
+		case GLFW_KEY_F8:		         return K_F8;
+		case GLFW_KEY_F9:		         return K_F9;
+		case GLFW_KEY_F10:		       return K_F10;
+		case GLFW_KEY_F11:		       return K_F11;
+		case GLFW_KEY_F12:		       return K_F12;
+		case GLFW_KEY_BACKSPACE:     return K_BACKSPACE;
+		case GLFW_KEY_DELETE:        return K_DEL;
+		case GLFW_KEY_PAUSE:	       return K_PAUSE;
+		case GLFW_KEY_LEFT_SHIFT:
+		case GLFW_KEY_RIGHT_SHIFT:   return K_SHIFT;
+		case GLFW_KEY_LEFT_CONTROL:
+		case GLFW_KEY_RIGHT_CONTROL: return K_CTRL;
+		case GLFW_KEY_LEFT_ALT:
+		case GLFW_KEY_RIGHT_ALT:
+		case GLFW_KEY_LEFT_SUPER:
+		case GLFW_KEY_RIGHT_SUPER:   return K_ALT;
+		case GLFW_KEY_INSERT:        return K_INS;
+		case GLFW_KEY_KP_MULTIPLY:   return '*';
+		case GLFW_KEY_KP_ADD:        return '+';
+		case GLFW_KEY_KP_SUBTRACT:   return '-';
+		case GLFW_KEY_KP_DIVIDE:     return '/';
+
+		default:
+			if (glfwKey >= 'A' && glfwKey <= 'Z')
+				return glfwKey - 'A' + 'a';
+	}
+
+	return glfwKey;
+}
+
 static Cursor CreateNullCursor(Display *display, Window root)
 {
     // Pixmap cursormask;
@@ -329,14 +382,15 @@ static void uninstall_grabs(void)
 	mouse_active = false;
 }
 
-static void HandleEvents(void)
+static void HandleEvents(GLFWwindow* window, int key, int scancode, int action, int mods)
 {
-	//XEvent event;
-	//KeySym ks;
 	int b;
 	qboolean dowarp = false;
 	int mwx = vid.width/2;
 	int mwy = vid.height/2;
+
+	// map GLFW key code -> Quake key code
+	Key_Event(KeyGLFWToQuake(key), action == GLFW_PRESS);
 
 	// if (!dpy)
 	// 	return;
@@ -675,30 +729,15 @@ static void Check_Gamma (unsigned char *pal)
 void VID_Init(unsigned char *palette)
 {
 	int i;
-  /*
-	int attrib[] = {
-		GLX_RGBA,
-		GLX_RED_SIZE, 1,
-		GLX_GREEN_SIZE, 1,
-		GLX_BLUE_SIZE, 1,
-		GLX_DOUBLEBUFFER,
-		GLX_DEPTH_SIZE, 1,
-		None
-	};
-  */
+
 	char	gldir[MAX_OSPATH];
-	int width = 640, height = 480;
-	//XSetWindowAttributes attr;
+	int width = 1920, height = 1080;
 	unsigned long mask;
-	//Window root;
-	//XVisualInfo *visinfo;
 	qboolean fullscreen = true;
 	int MajorVersion, MinorVersion;
 	int actualWidth, actualHeight;
 
 	Cvar_RegisterVariable (&vid_mode);
-	//Cvar_RegisterVariable (&in_mouse);
-	//Cvar_RegisterVariable (&in_dgamouse);
 	Cvar_RegisterVariable (&m_filter);
 	Cvar_RegisterVariable (&gl_ztrick);
 
@@ -730,35 +769,17 @@ void VID_Init(unsigned char *palette)
 		vid.conwidth = 1280;
 
 	// pick a conheight that matches with correct aspect
-	vid.conheight = vid.conwidth*3 / 4;
+	vid.conheight = vid.conwidth*16 / 9;
 
 	if ((i = COM_CheckParm("-conheight")) != 0)
 		vid.conheight = Q_atoi(com_argv[i+1]);
 	if (vid.conheight < 720)
 		vid.conheight = 720;
 
-	// if (!(dpy = XOpenDisplay(NULL))) {
-	// 	fprintf(stderr, "Error couldn't open the X display\n");
-	// 	exit(1);
-	// }
-
-	// scrnum = DefaultScreen(dpy);
-	// root = RootWindow(dpy, scrnum);
-
 	// Get video mode list
 	MajorVersion = MinorVersion = 0;
-	// if (!XF86VidModeQueryVersion(dpy, &MajorVersion, &MinorVersion)) {
-	// 	vidmode_ext = false;
-	// } else {
-		Con_Printf("Using XFree86-VidModeExtension Version %d.%d\n", MajorVersion, MinorVersion);
-		vidmode_ext = true;
-	// }
-
-	// visinfo = glXChooseVisual(dpy, scrnum, attrib);
-	// if (!visinfo) {
-	// 	fprintf(stderr, "qkHack: Error couldn't get an RGB, Double-buffered, Depth visual\n");
-	// 	exit(1);
-	// }
+	Con_Printf("Using XFree86-VidModeExtension Version %d.%d\n", MajorVersion, MinorVersion);
+	vidmode_ext = true;
 
 	if (vidmode_ext) {
 		int best_fit, best_dist, dist, x, y;
@@ -787,8 +808,8 @@ void VID_Init(unsigned char *palette)
 
 			best_fit = 0;
 			if (best_fit != -1) {
-				actualWidth = 1280; //vidmodes[best_fit]->hdisplay;
-				actualHeight = 720; //vidmodes[best_fit]->vdisplay;
+				actualWidth = 1920; //vidmodes[best_fit]->hdisplay;
+				actualHeight = 1080; //vidmodes[best_fit]->vdisplay;
 
 				// change to the mode
 				// XXX
@@ -859,7 +880,7 @@ void VID_Init(unsigned char *palette)
 		Sys_Quit();
 	}
 
-	vid.window = glfwCreateWindow(width, height, "Quake", NULL, NULL);
+	vid.window = glfwCreateWindow(width, height, "Quake", glfwGetPrimaryMonitor(), NULL);
 	if (!vid.window) {
 		Con_SafePrintf("ERROR: glfwCreateWindow()");
 		glfwTerminate();
@@ -867,6 +888,7 @@ void VID_Init(unsigned char *palette)
 	}
 
   glfwMakeContextCurrent(vid.window);
+	glfwSetKeyCallback(vid.window, HandleEvents);
 
 	GL_Init();
 
