@@ -5,7 +5,7 @@ find_package(glfw3 REQUIRED)
 
 enable_language(C ASM)
 
-set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DGLQUAKE")
+set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -DGLQUAKE -std=c11")
 set(CMAKE_C_FLAGS_DEBUG "${CMAKE_C_FLAGS_DEBUG} -Wall -g3 -ggdb")
 set(CMAKE_C_FLAGS_RELEASE "${CMAKE_C_FLAGS_RELEASE} -Wall -march=native")
 
